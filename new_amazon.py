@@ -4,11 +4,12 @@ import re
 import gspread
 from google.oauth2.service_account import Credentials
 from playwright.sync_api import sync_playwright
+from datetime import datetime
 
 # ==========================================
 # CONFIGURATION
 # ==========================================
-CREDENTIALS_JSON = "credentials.json" 
+CREDENTIALS_JSON = "second-hold-502307-f9-ef85df52925f.json" 
 GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1v6YeErYNAtoaq5KBdES21IMnDbKvQw6qVny0VaBML94/edit?gid=0#gid=0" 
 BATCH_SIZE = 15  
 COOLDOWN_BETWEEN_BATCHES = 30  
@@ -59,16 +60,29 @@ def get_asins_from_sheet(spreadsheet):
 
 def init_output_sheet(spreadsheet):
     """Ensures an 'Output' worksheet exists with proper headers."""
-    headers = ["ASIN", "Total Reviews", "Average Rating", "5 %", "4%", "3 %", "2 %", "1 %"]
-    
+    headers = [
+        "Timestamp",
+        "ASIN",
+        "Total Reviews",
+        "Average Rating",
+        "5 %",
+        "4 %",
+        "3 %",
+        "2 %",
+        "1 %"
+    ]
+
     try:
         output_sheet = spreadsheet.worksheet("Output")
     except gspread.exceptions.WorksheetNotFound:
-        output_sheet = spreadsheet.add_worksheet(title="Output", rows="1000", cols="10")
+        output_sheet = spreadsheet.add_worksheet(
+            title="Output",
+            rows="1000",
+            cols="10"
+        )
         output_sheet.append_row(headers)
-        
-    return output_sheet
 
+    return output_sheet
 # ==========================================
 # AMAZON SCRAPER ENGINE
 # ==========================================
@@ -256,9 +270,18 @@ def main():
                 print(f"Scraping data for: {item[:40]}...")
                 data = scrape_amazon_asin(page, item)
                 
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
                 row_to_append = [
-                    data["ASIN"], data["Total Reviews"], data["Average Rating"],
-                    data["5★ %"], data["4★ %"], data["3★ %"], data["2★ %"], data["1★ %"]
+                    timestamp,
+                    data["ASIN"],
+                    data["Total Reviews"],
+                    data["Average Rating"],
+                    data["5★ %"],
+                    data["4★ %"],
+                    data["3★ %"],
+                    data["2★ %"],
+                    data["1★ %"]
                 ]
                 
                 output_sheet.append_row(row_to_append)
