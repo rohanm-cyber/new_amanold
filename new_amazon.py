@@ -9,7 +9,7 @@ from datetime import datetime
 # ==========================================
 # CONFIGURATION
 # ==========================================
-CREDENTIALS_JSON = "second-hold-502307-f9-ef85df52925f.json" 
+CREDENTIALS_JSON = "credentials.json" 
 GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1v6YeErYNAtoaq5KBdES21IMnDbKvQw6qVny0VaBML94/edit?gid=0#gid=0" 
 BATCH_SIZE = 15  
 COOLDOWN_BETWEEN_BATCHES = 30  
