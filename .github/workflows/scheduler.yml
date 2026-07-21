@@ -5,7 +5,7 @@ on:
 
   schedule:
     # Every 2 minutes from 13:00 IST (07:30 UTC) to 13:58 IST
-    - cron: '*/2 7 * * *'
+    - cron: '30 7 * * *'
 
 
 jobs:
