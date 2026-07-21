@@ -1,0 +1,32 @@
+name: Amazon Scraper Scheduler
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 */1 * * *'   # Har 1 hour mein run hoga
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Repository Files
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Packages
+        run: |
+          pip install -r requirements.txt
+
+      - name: Create Google Credentials File
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+
+      - name: Run Python Script
+        run: |
+          python new-amazon.py
